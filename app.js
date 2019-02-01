@@ -1,5 +1,6 @@
 
 const express = require('express');
+const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 const router = require('./routes/createRouter')();
 const flash = require('connect-flash');
@@ -9,6 +10,9 @@ const passportStrategy = require('./config/passport/passport')(passport);
 const listenPort = process.env.PORT || 3000;
 
 const app = express();
+
+// Make /dist folder available
+app.use(express.static(path.join(__dirname, './dist')));
 
 // MongoDB setup
 const dBaseConfigFile = require('./config/database/keys');
