@@ -9,6 +9,7 @@ A template for web authentication systems using Express. MongoDB and EJS are the
 - [API](#api)
 - [Support](#support)
 - [Contributing](#contributing)
+- [Acknowledgment](#acknowledgment)
 
 ## Installation
 
@@ -44,3 +45,7 @@ Please [open an issue](https://github.com/fraction/readme-boilerplate/issues/new
 ## Contributing
 
 Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/fraction/readme-boilerplate/compare/).
+
+## Acknowledgments
+
+Thanks to [Brad Traversy](https://github.com/bradtraversy) for the idea and tutorials.
