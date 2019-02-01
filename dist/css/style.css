@@ -1,0 +1,9 @@
+.top-warning {
+    background-color: orange;
+    position: absolute;
+    top: 0rem;
+    padding: 0.2rem 0.5rem;
+    margin: 0.5rem 0;
+    text-align: center;
+    width: 100%;
+}
