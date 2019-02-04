@@ -2,8 +2,7 @@ const localStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const appRoot = require('app-root-path');
-const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+const logger = require(appRoot + '/middleware/logging')();
 
 // Load User model
 const User = require('../models/database/User');

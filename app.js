@@ -4,8 +4,8 @@ const path = require('path');
 const router = require('./routes/createRouter')();
 const envVar = require('./config/environment/variables');
 const setMiddleware = require('./middleware/main');
-const winstonOptions = require('./config/logging/winston');
-const logger = require('./middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+const logger = require('./middleware/logging')();
+
 //const errorHandlers = require('./lib/errorHandlers');
 const listenPort = envVar.port || 3000;
 

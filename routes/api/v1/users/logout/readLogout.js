@@ -1,7 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
 const appRoot = require('app-root-path');
-const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+const logger = require(appRoot + '/middleware/logging')();
 
 router.get('/v1/users/logout', (req, res, next) => {
     try{

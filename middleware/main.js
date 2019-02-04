@@ -4,20 +4,20 @@ const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const passportStrategy = require('./passport')(passport);
-const winstonOptions = require('../config/logging/winston');
 const envVar = require('../config/environment/variables');
 
 module.exports = (app, express) => {
     
+    // Setting up winston logger
+    const logger = require('./logging')();
+
     //Environment dependent configuration
-    if(envVar.environment === "development") {       
-        const logger = require('./logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+    if(envVar.environment === "development") {            
         // Morgan HTTP request middleware
         const morgan = require('morgan');
         app.use(morgan('combined', { stream: logger.stream }));
         logger.debug('We are in development environment.');
     } else if(envVar.environment === "production") {
-        const logger = require('./logging')(winstonOptions.prodFile, winstonOptions.prodConsole, winstonOptions.timeFormat);
         const compression = require('compression');
         app.use(compression({ threshold: 0 }));
     }

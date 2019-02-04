@@ -2,8 +2,7 @@ const router = require('express').Router({ mergeParams: true });
 const validationResult = require('express-validator/check').validationResult;
 const bcrypt = require('bcryptjs');
 const appRoot = require('app-root-path');
-const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+const logger = require(appRoot + '/middleware/logging')();
 
 let User = require(appRoot + `/models/database/User`);
 

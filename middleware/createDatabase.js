@@ -1,9 +1,8 @@
 
 const mongoose = require('mongoose');
 const appRoot = require('app-root-path');
-const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
-const envVar = require(appRoot + '/config/environment/variables');
+const logger = require( appRoot + '/middleware/logging')();
+const envVar = require( appRoot + '/config/environment/variables');
 
 module.exports = (configFile) => {  
     // Connect to MongoDb

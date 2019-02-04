@@ -1,8 +1,7 @@
 const router = require('express').Router({ mergeParams: true });
 const passport = require('passport');
 const appRoot = require('app-root-path');
-const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+const logger = require(appRoot + '/middleware/logging')();
 
 router.post('/v1/users/login', (req, res, next) => {
     try{

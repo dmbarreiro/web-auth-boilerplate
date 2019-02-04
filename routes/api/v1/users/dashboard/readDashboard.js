@@ -1,8 +1,7 @@
 const router = require('express').Router({ mergeParams: true });
 const authLib = require('../../../../../lib/auth');
 const appRoot = require('app-root-path');
-const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
+const logger = require(appRoot + '/middleware/logging')();
 
 router.get('/v1/users/dashboard', authLib.ensureAuth, (req, res, next) => {
     try{
