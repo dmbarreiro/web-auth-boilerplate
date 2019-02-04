@@ -1,4 +1,5 @@
 const appRoot = require('app-root-path');
+const { format } = require('winston');
 
 module.exports = {
     devFile: {
@@ -30,5 +31,9 @@ module.exports = {
         handleExceptions: true,
         json: false,
         colorize: true
-    }
+    },
+    timeFormat: format.combine(
+        format.timestamp(),
+        format.prettyPrint()
+    )
 };

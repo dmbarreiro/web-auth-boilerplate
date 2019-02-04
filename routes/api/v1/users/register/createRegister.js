@@ -3,7 +3,7 @@ const validationResult = require('express-validator/check').validationResult;
 const bcrypt = require('bcryptjs');
 const appRoot = require('app-root-path');
 const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole);
+const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
 
 let User = require(appRoot + `/models/database/User`);
 
@@ -32,25 +32,27 @@ router.post('/v1/users/register', userValidation
         // Hash user password
         bcrypt.genSalt(12, (error, salt) => {
             bcrypt.hash(newUser.password, salt, async (error, hash) => {
-                if(error) throw error;
-                // Set password to hash
-                newUser.password = hash;
                 try {
+                    if(error) throw error;
+                    // Set password to hash
+                    newUser.password = hash;
                     const savedUser = await newUser.save();
                     req.flash('success_msg', 'Registration was successful. You can now log in');
                     return res.redirect('/api/v1/users/login');
-                } catch(error) {
-                    logger.error(error);
-                    req.flash('error_msg', 'An error occurred and registration failed. Contact the administrator (create register saving)');
-                    return res.redirect('/api/v1/users/login');
+                } catch(err) {
+                    next(err)
+                    // logger.error(error);
+                    // req.flash('error_msg', 'An error occurred and registration failed. Contact the administrator (create register saving)');
+                    // return res.redirect('/api/v1/users/login');
                 }
                 
             })
         });
-    } catch(error) {
-        logger.error(error);
-        req.flash('error_msg', 'An error occurred and registration failed. Contact the administrator (create register verification)');
-        return res.redirect('/api/v1/users/login');
+    } catch(err) {
+        next(err);
+        // logger.error(err);
+        // req.flash('error_msg', 'An error occurred and registration failed. Contact the administrator (create register verification)');
+        // return res.redirect('/api/v1/users/login');
     }
 });
 

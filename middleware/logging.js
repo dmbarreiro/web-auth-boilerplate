@@ -1,8 +1,9 @@
 
 const winston = require('winston');
 
-module.exports = (fileOptions, consoleOptions) => {
+module.exports = (fileOptions, consoleOptions, outputFormat) => {
     const logger = winston.createLogger({
+        format: outputFormat,
         transports: [
             new winston.transports.File(fileOptions),
             new winston.transports.Console(consoleOptions)

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const appRoot = require('app-root-path');
 const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole);
+const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
 
 // Load User model
 const User = require('../models/database/User');
@@ -16,14 +16,14 @@ module.exports = (passport) => {
                 if(!userMatch) {
                     return done(null, false,  { message: 'Incorrect E-mail or password'});
                 }
-                bcrypt.compare(password, userMatch.password, (error, isMatch) => {
-                    if(error) throw error;
+                bcrypt.compare(password, userMatch.password, (err, isMatch) => {
+                    if(err) throw err;
                     if(!isMatch) return done(null, false,  { message: 'Incorrect E-mail or password'});
                     return done(null, userMatch);
                 });
-            } catch(error) {
-                logger.error(error);
-                return done(error);
+            } catch(err) {
+                logger.error(`passport Error: ${err}`);
+                return done(err);
             }
         })
     );

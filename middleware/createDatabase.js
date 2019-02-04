@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 const appRoot = require('app-root-path');
 const winstonOptions = require(appRoot + '/config/logging/winston');
-const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole);
+const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
 const envVar = require(appRoot + '/config/environment/variables');
 
 module.exports = (configFile) => {  
@@ -14,8 +14,7 @@ module.exports = (configFile) => {
         if(envVar.environment !== 'production') logger.debug('MongoDB connected...');
         return mongoose.connection;
     } catch(err) {
-        logger.error(err);
+        logger.error(`createDatase Error: ${err}`);
         process.exitCode = 1;
     }
 };
-

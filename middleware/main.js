@@ -17,15 +17,14 @@ module.exports = (app, express) => {
         app.use(morgan('combined', { stream: logger.stream }));
         logger.debug('We are in development environment.');
     } else if(envVar.environment === "production") {
-        const logger = require('./logging')(winstonOptions.prodFile, winstonOptions.prodConsole);
+        const logger = require('./logging')(winstonOptions.prodFile, winstonOptions.prodConsole, winstonOptions.timeFormat);
         const compression = require('compression');
         app.use(compression({ threshold: 0 }));
     }
     
     // MongoDB setup
     const dBaseConfig = require('../config/database/keys');
-    dBase = require('./createDatabase');
-    const dBaseConnection = dBase(dBaseConfig);
+    const dBaseConnection = require('./createDatabase')(dBaseConfig);
 
     // ejs setup
     app.use(expressLayouts);
