@@ -6,7 +6,8 @@
   "scripts": {
     "build:dev": "webpack --env dev --progress --profile --colors",
     "build:prod": "webpack --env prod --progress --profile --colors",
-    "dev": "nodemon -r dotenv/config --trace-sync-io app.js",
+    "dev": "nodemon -r dotenv/config app.js",
+    "dev:trace": "nodemon -r dotenv/config --trace-sync-io app.js",
     "start": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,8 +15,11 @@
   "author": "David Martinez Barreiro <davidmartinezbarreiro@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "app-root-path": "^2.1.0",
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.3",
     "connect-flash": "^0.1.1",
+    "connect-mongo": "^2.0.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-ejs-layouts": "^2.5.0",
@@ -23,8 +27,10 @@
     "express-validator": "^5.3.1",
     "glob": "^7.1.3",
     "mongoose": "^5.4.7",
+    "morgan": "^1.9.1",
     "passport": "^0.4.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "dotenv": "^6.2.0",

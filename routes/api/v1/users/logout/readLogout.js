@@ -1,4 +1,7 @@
 const router = require('express').Router({ mergeParams: true });
+const appRoot = require('app-root-path');
+const winstonOptions = require(appRoot + '/config/logging/winston');
+const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole);
 
 router.get('/v1/users/logout', (req, res, next) => {
     try{
@@ -6,7 +9,7 @@ router.get('/v1/users/logout', (req, res, next) => {
         req.flash('success_msg', 'You logged out successfully');
         res.redirect('/api/v1/users/login');
     } catch(error) {
-        console.log(error);
+        logger.error(error);
         req.flash('error_msg', 'An error occurred. Contact the administrator (read logout)');
         return res.redirect('/api/v1/users/login');
     }

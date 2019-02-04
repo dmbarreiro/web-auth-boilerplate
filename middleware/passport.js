@@ -1,9 +1,12 @@
 const localStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const appRoot = require('app-root-path');
+const winstonOptions = require(appRoot + '/config/logging/winston');
+const logger = require(appRoot + '/middleware/logging')(winstonOptions.devFile, winstonOptions.devConsole);
 
 // Load User model
-const User = require('../../models/database/User');
+const User = require('../models/database/User');
 
 module.exports = (passport) => {
     passport.use(
@@ -19,7 +22,7 @@ module.exports = (passport) => {
                     return done(null, userMatch);
                 });
             } catch(error) {
-                console.log(error);
+                logger.error(error);
                 return done(error);
             }
         })
