@@ -9,9 +9,6 @@ router.get('/v1/users/logout', (req, res, next) => {
         res.redirect('/api/v1/users/login');
     } catch(err) {
         next(err);
-        // logger.error(err);
-        // req.flash('error_msg', 'An error occurred. Contact the administrator (read logout)');
-        // return res.redirect('/api/v1/users/login');
     }
 });
 

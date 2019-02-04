@@ -5,8 +5,7 @@ const router = require('./routes/createRouter')();
 const envVar = require('./config/environment/variables');
 const setMiddleware = require('./middleware/main');
 const logger = require('./middleware/logging')();
-
-//const errorHandlers = require('./lib/errorHandlers');
+const { defaultErrorHandler } = require('./lib/errorHandlers');
 const listenPort = envVar.port || 3000;
 
 const app = express();
@@ -17,13 +16,17 @@ app.use(express.static(path.join(__dirname, './dist')));
 setMiddleware(app, express, envVar);
 
 // Routes setup
-app.get('/', (err, req, res, next)  => {
-    if(err) next(err);
-    return res.render('welcome');
+app.get('/', (req, res, next)  => {
+    try{
+        res.render('welcome');
+    } catch(err) {
+        next(err);
+    }
 });
 app.use('/api', router);
+
 // Default request error handler
-//app.use(errorHandlers.defaultErrorHandler);
+app.use(defaultErrorHandler);
 
 if(app.get('env') !== 'production')  {
     app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));

@@ -11,9 +11,6 @@ router.post('/v1/users/login', (req, res, next) => {
           failureFlash: true })(req, res, next);
     } catch(err) {
         next(err);
-        // logger.error(error);
-        // req.flash('error_msg', 'An error occurred. Contact the administrator');
-        // res.redirect('/api/v1/users/login');
     }
 });
 

@@ -14,9 +14,6 @@ router.get('/v1/users/dashboard', authLib.ensureAuth, (req, res, next) => {
         res.flush();
     } catch(err) {
         next(err);
-        // logger.error(error);
-        // req.flash('error_msg', 'An error occurred. Contact the administrator (read dashb)');
-        // return res.redirect('/api/v1/users/login');
     }
 });
 
