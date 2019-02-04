@@ -1,17 +1,17 @@
-module.exports = (app, express, envVar) => {
 
-    
-    const expressLayouts = require('express-ejs-layouts');
-    const flash = require('connect-flash');
-    const session = require('express-session');
-    const passport = require('passport');
-    const passportStrategy = require('./passport')(passport);
-    const winstonOptions = require('../config/logging/winston');
-    
+const expressLayouts = require('express-ejs-layouts');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const passportStrategy = require('./passport')(passport);
+const winstonOptions = require('../config/logging/winston');
+const envVar = require('../config/environment/variables');
 
+module.exports = (app, express) => {
+    
     //Environment dependent configuration
     if(envVar.environment === "development") {       
-        const logger = require('./logging')(winstonOptions.devFile, winstonOptions.devConsole);
+        const logger = require('./logging')(winstonOptions.devFile, winstonOptions.devConsole, winstonOptions.timeFormat);
         // Morgan HTTP request middleware
         const morgan = require('morgan');
         app.use(morgan('combined', { stream: logger.stream }));
