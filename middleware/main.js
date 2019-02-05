@@ -5,6 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const passportStrategy = require('./passport')(passport);
 const envVar = require('../config/environment/variables');
+const maxListeners = 15;
 
 module.exports = (app, express) => {
     

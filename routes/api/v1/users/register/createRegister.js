@@ -2,7 +2,6 @@ const router = require('express').Router({ mergeParams: true });
 const validationResult = require('express-validator/check').validationResult;
 const bcrypt = require('bcryptjs');
 const appRoot = require('app-root-path');
-const logger = require(appRoot + '/middleware/logging')();
 
 let User = require(appRoot + `/models/database/User`);
 

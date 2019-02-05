@@ -4,9 +4,20 @@ const path = require('path');
 const router = require('./routes/createRouter')();
 const envVar = require('./config/environment/variables');
 const setMiddleware = require('./middleware/main');
-const logger = require('./middleware/logging')();
 const { defaultErrorHandler } = require('./lib/errorHandlers');
 const listenPort = envVar.port || 3000;
+/* 
+When creating a logger instance per file I started getting a MaxListenersExceededWarning.
+Warning went away when logger instances were removed from the files were not
+using them. Problem was fixed on Winston Pull #1344 for file and #1513 silences
+warnings for console transport, it still has to be fixed for console. My Winston version
+does not have pulls #1344 or #1513 (or both) I think cause I still see the warning.
+Winston Bug Report in Github is #1334.
+If we see it in the future again it is possible to fix it (at the moment at least)
+increasing the maximum number of listeners from 10 to 15:
+    process.setMaxListeners(15);
+*/
+const logger = require('./middleware/logging')();
 
 const app = express();
 

@@ -1,7 +1,6 @@
 const router = require('express').Router({ mergeParams: true });
-const authLib = require('../../../../../lib/auth');
 const appRoot = require('app-root-path');
-const logger = require(appRoot + '/middleware/logging')();
+const authLib = require('../../../../../lib/auth');
 
 router.get('/v1/users/dashboard', authLib.ensureAuth, (req, res, next) => {
     try{
