@@ -1,31 +1,31 @@
-module.exports = (app, express, envVar) => {
 
+const expressLayouts = require('express-ejs-layouts');
+const flash = require('connect-flash');
+const session = require('express-session');
+const passport = require('passport');
+const passportStrategy = require('./passport')(passport);
+const envVar = require('../config/environment/variables');
+const maxListeners = 15;
+
+module.exports = (app, express) => {
     
-    const expressLayouts = require('express-ejs-layouts');
-    const flash = require('connect-flash');
-    const session = require('express-session');
-    const passport = require('passport');
-    const passportStrategy = require('./passport')(passport);
-    const winstonOptions = require('../config/logging/winston');
-    
+    // Setting up winston logger
+    const logger = require('./logging')();
 
     //Environment dependent configuration
-    if(envVar.environment === "development") {       
-        const logger = require('./logging')(winstonOptions.devFile, winstonOptions.devConsole);
+    if(envVar.environment === "development") {            
         // Morgan HTTP request middleware
         const morgan = require('morgan');
         app.use(morgan('combined', { stream: logger.stream }));
         logger.debug('We are in development environment.');
     } else if(envVar.environment === "production") {
-        const logger = require('./logging')(winstonOptions.prodFile, winstonOptions.prodConsole);
         const compression = require('compression');
         app.use(compression({ threshold: 0 }));
     }
     
     // MongoDB setup
     const dBaseConfig = require('../config/database/keys');
-    dBase = require('./createDatabase');
-    const dBaseConnection = dBase(dBaseConfig);
+    const dBaseConnection = require('./createDatabase')(dBaseConfig);
 
     // ejs setup
     app.use(expressLayouts);

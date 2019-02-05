@@ -1,8 +1,16 @@
 
 const winston = require('winston');
+const envVar = require('../config/environment/variables');
+if(envVar.environment !== 'production') {
+    // Defined with var, let and const are block scope since ES2017
+    var { devFile: fileOptions, devConsole: consoleOptions, timeFormat: outputFormat } = require('../config/logging/winston');
+} else {
+    var { prodFile: fileOptions, prodConsole: consoleOptions, timeFormat: outputFormat } = require('../config/logging/winston');
+}
 
-module.exports = (fileOptions, consoleOptions) => {
+ const setUpLogger = () => {
     const logger = winston.createLogger({
+        format: outputFormat,
         transports: [
             new winston.transports.File(fileOptions),
             new winston.transports.Console(consoleOptions)
@@ -18,3 +26,5 @@ module.exports = (fileOptions, consoleOptions) => {
 
     return logger;
 };
+
+module.exports = setUpLogger;
