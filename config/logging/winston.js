@@ -1,36 +1,41 @@
 const appRoot = require('app-root-path');
 const { format } = require('winston');
 
+const generalProperties = {
+    handleExceptions: true,
+    json: false,
+    colorize: true
+};
+
 module.exports = {
     devFile: {
         level: 'debug',
         filename: `${appRoot}/logs/app.dev.log`,
-        handleExceptions: true,
-        json: true,
         maxsize: 1048576, // 1MB -> 1024*1024 bytes
         maxFiles: 3,
-        colorize: false
+        ...generalProperties
     },
-    devConsole: {
+    testFile: {
         level: 'debug',
-        handleExceptions: true,
-        json: false,
-        colorize: true
+        filename: `${appRoot}/logs/app.test.log`,
+        maxsize: 1048576, // 1MB -> 1024*1024 bytes
+        maxFiles: 3,
+        ...generalProperties
     },
     prodFile: {
         level: 'error',
         filename: `${appRoot}/logs/app.prod.log`,
-        handleExceptions: true,
-        json: true,
         maxsize: 10485760, // 10MB
         maxFiles: 5,
-        colorize: false
+        ...generalProperties
+    },
+    devConsole: {
+        level: 'debug',
+        ...generalProperties
     },
     prodConsole: {
         level: 'warning',
-        handleExceptions: true,
-        json: false,
-        colorize: true
+        ...generalProperties
     },
     timeFormat: format.combine(
         format.timestamp(),

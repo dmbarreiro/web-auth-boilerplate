@@ -8,7 +8,12 @@ module.exports = (configFile) => {
     // Connect to MongoDb
     try {
         // MongoDb config
-        const db = configFile.MongoURI;
+        let db = undefined;
+        if(envVar.environment === 'test') {
+            db = configFile.MongoTestURI;
+        } else {
+            db = configFile.MongoURI;
+        }       
         const connection = mongoose.connect(db, { useNewUrlParser: true });
         if(envVar.environment !== 'production') logger.debug('MongoDB connected...');
         return mongoose.connection;

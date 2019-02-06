@@ -3,9 +3,9 @@ const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
-const passportStrategy = require('./passport')(passport);
-const envVar = require('../config/environment/variables');
-const maxListeners = 15;
+const passportStrategy = require('./passport.js')(passport);
+const envVar = require('../config/environment/variables.js');
+const appRoot = require('app-root-path');
 
 module.exports = (app, express) => {
     
@@ -24,7 +24,7 @@ module.exports = (app, express) => {
     }
     
     // MongoDB setup
-    const dBaseConfig = require('../config/database/keys');
+    const dBaseConfig = require(appRoot + '/config/database/keys');
     const dBaseConnection = require('./createDatabase')(dBaseConfig);
 
     // ejs setup
