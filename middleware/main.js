@@ -1,3 +1,5 @@
+"use strict";
+
 
 const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');

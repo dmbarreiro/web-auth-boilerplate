@@ -1,3 +1,5 @@
+"use strict";
+
 
 const winston = require('winston');
 const envVar = require('../config/environment/variables');

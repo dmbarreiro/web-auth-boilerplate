@@ -1,3 +1,5 @@
+"use strict";
+
 
 const mongoose = require('mongoose');
 const appRoot = require('app-root-path');

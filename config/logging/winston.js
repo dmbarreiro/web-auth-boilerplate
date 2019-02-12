@@ -1,3 +1,5 @@
+"use strict";
+
 const appRoot = require('app-root-path');
 const { format } = require('winston');
 

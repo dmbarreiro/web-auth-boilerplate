@@ -1,3 +1,5 @@
+"use strict";
+
 module.exports = {
     MongoTestURI: 'mongodb://localhost:27017/test',
     MongoURI: 'mongodb://localhost:27017/test',

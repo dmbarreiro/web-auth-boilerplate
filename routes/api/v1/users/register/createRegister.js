@@ -1,3 +1,5 @@
+"use strict";
+
 const router = require('express').Router({ mergeParams: true });
 const validationResult = require('express-validator/check').validationResult;
 const bcrypt = require('bcryptjs');

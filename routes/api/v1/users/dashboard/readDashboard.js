@@ -1,3 +1,5 @@
+"use strict";
+
 const router = require('express').Router({ mergeParams: true });
 const appRoot = require('app-root-path');
 const authLib = require('../../../../../lib/auth');
