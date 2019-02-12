@@ -1,17 +1,15 @@
 "use strict";
 
+const appRoot = require('app-root-path');
 const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
 const passportStrategy = require('./passport.js')(passport);
-const envVar = require('../config/environment/variables.js');
-const appRoot = require('app-root-path');
+const envVar = require(appRoot + '/config/environment/variables');
+const logger = require(appRoot + '/middleware/logging')();
 
-module.exports = (app, express) => {
-    
-    // Setting up winston logger
-    const logger = require('./logging')();
+module.exports = (app, express, dBaseConnection) => {
 
     //Environment dependent configuration
     if(envVar.environment === "development") {            
@@ -22,7 +20,7 @@ module.exports = (app, express) => {
     } else if(envVar.environment === "production") {
         const compression = require('compression');
         app.use(compression({ threshold: 0 }));
-    }
+    };
 
     // ejs setup
     app.use(expressLayouts);
@@ -64,4 +62,4 @@ module.exports = (app, express) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
-}
+};

@@ -3,11 +3,11 @@
 const appRoot = require('app-root-path');
 const express = require('express');
 const path = require('path');
-const router = require('./routes/createRouter')();
-const envVar = require('./config/environment/variables');
-const setMiddleware = require('./middleware/main');
-const { defaultErrorHandler } = require('./lib/errorHandlers');
-const { gracefulConnectionDrop, createMongodbConnection } = require('./lib/libMongoose.js');
+const router = require(appRoot + '/routes/createRouter')();
+const envVar = require(appRoot + '/config/environment/variables');
+const setMiddleware = require(appRoot + '/middleware/main');
+const { defaultErrorHandler } = require(appRoot + '/lib/errorHandlers');
+const { gracefulConnectionDrop, createMongodbConnection } = require(appRoot + '/lib/libMongoose.js');
 const listenPort = envVar.port || 3000;
 /* 
 When creating a logger instance per file I started getting a MaxListenersExceededWarning.
@@ -20,18 +20,21 @@ If we see it in the future again it is possible to fix it (at the moment at leas
 increasing the maximum number of listeners from 10 to 15:
     process.setMaxListeners(15);
 */
-const logger = require('./middleware/logging')();
+
+// Setting up winston logger
+const logger = require(appRoot + '/middleware/logging')();
 
 const app = express();
 
 // Make /dist folder available
 app.use(express.static(path.join(__dirname, './dist')));
 
+// Setting up MongoDb connection
 const dbConnectionArray = Array();
 const dBaseConfig = require(appRoot + '/config/database/keys');
 dbConnectionArray.push(createMongodbConnection(dBaseConfig));
 
-setMiddleware(app, express, envVar);
+setMiddleware(app, express, dbConnectionArray[0]);
 
 // Routes setup
 app.get('/', (req, res, next)  => {
