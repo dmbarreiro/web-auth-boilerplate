@@ -9,7 +9,8 @@ const setMiddleware = require(appRoot + '/middleware/main');
 const { defaultErrorHandler } = require(appRoot + '/lib/errorHandlers');
 const { gracefulConnectionDrop, createMongodbConnection } = require(appRoot + '/lib/libMongoose.js');
 const listenPort = envVar.port || 3000;
-/* 
+
+/*
 When creating a logger instance per file I started getting a MaxListenersExceededWarning.
 Warning went away when logger instances were removed from the files were not
 using them. Problem was fixed on Winston Pull #1344 for file and #1513 silences
@@ -30,8 +31,9 @@ const app = express();
 app.use(express.static(path.join(__dirname, './dist')));
 
 // Setting up MongoDb connection
-const dbConnectionArray = Array();
+const dbConnectionArray = new Array();
 const dBaseConfig = require(appRoot + '/config/database/keys');
+
 dbConnectionArray.push(createMongodbConnection(dBaseConfig));
 
 setMiddleware(app, express, dbConnectionArray[0]);
@@ -49,8 +51,14 @@ app.use('/api', router);
 // Default request error handler
 app.use(defaultErrorHandler);
 
+let server = undefined;
 if(app.get('env') !== 'production')  {
-    module.exports = app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));
+    module.exports = server = app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));
 } else {
-    module.exports = app.listen(listenPort);
+    module.exports = server = app.listen(listenPort);
 }
+
+server.on("close", () => {
+    logger.warn("App closing...");
+    gracefulConnectionDrop(dbConnectionArray);
+})
