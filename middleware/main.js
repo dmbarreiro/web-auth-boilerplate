@@ -1,6 +1,5 @@
 "use strict";
 
-
 const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
@@ -24,10 +23,6 @@ module.exports = (app, express) => {
         const compression = require('compression');
         app.use(compression({ threshold: 0 }));
     }
-    
-    // MongoDB setup
-    const dBaseConfig = require(appRoot + '/config/database/keys');
-    const dBaseConnection = require('./createDatabase')(dBaseConfig);
 
     // ejs setup
     app.use(expressLayouts);

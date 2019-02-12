@@ -12,7 +12,6 @@ router.get('/v1/users/dashboard', authLib.ensureAuth, (req, res, next) => {
             }
         
         });
-        res.flush();
     } catch(err) {
         next(err);
     }

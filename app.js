@@ -1,11 +1,13 @@
 "use strict";
 
+const appRoot = require('app-root-path');
 const express = require('express');
 const path = require('path');
 const router = require('./routes/createRouter')();
 const envVar = require('./config/environment/variables');
 const setMiddleware = require('./middleware/main');
 const { defaultErrorHandler } = require('./lib/errorHandlers');
+const { gracefulConnectionDrop, createMongodbConnection } = require('./lib/libMongoose.js');
 const listenPort = envVar.port || 3000;
 /* 
 When creating a logger instance per file I started getting a MaxListenersExceededWarning.
@@ -25,6 +27,10 @@ const app = express();
 // Make /dist folder available
 app.use(express.static(path.join(__dirname, './dist')));
 
+const dbConnectionArray = Array();
+const dBaseConfig = require(appRoot + '/config/database/keys');
+dbConnectionArray.push(createMongodbConnection(dBaseConfig));
+
 setMiddleware(app, express, envVar);
 
 // Routes setup
@@ -41,7 +47,11 @@ app.use('/api', router);
 app.use(defaultErrorHandler);
 
 if(app.get('env') !== 'production')  {
-    app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));
+    module.exports = app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));
 } else {
-    app.listen(listenPort);
+    module.exports = app.listen(listenPort);
 }
+
+// process
+//     .on('SIGINT', gracefulConnectionDrop(dbConnectionArray))
+//     .on('SIGTERM', gracefulConnectionDrop(dbConnectionArray));
