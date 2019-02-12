@@ -55,6 +55,3 @@ if(app.get('env') !== 'production')  {
     module.exports = app.listen(listenPort);
 }
 
-// process
-//     .on('SIGINT', gracefulConnectionDrop(dbConnectionArray))
-//     .on('SIGTERM', gracefulConnectionDrop(dbConnectionArray));
