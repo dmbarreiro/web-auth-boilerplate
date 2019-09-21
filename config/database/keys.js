@@ -6,6 +6,7 @@ module.exports = {
     secret: '6 5 4 0!',
     options: { 
         useNewUrlParser: true,
+        useUnifiedTopology: true,
         keepAlive: 300000, 
         connectTimeoutMS: 30000
     }
