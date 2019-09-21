@@ -1,12 +1,16 @@
+"use strict";
 
+const appRoot = require('app-root-path');
 const express = require('express');
 const path = require('path');
-const router = require('./routes/createRouter')();
-const envVar = require('./config/environment/variables');
-const setMiddleware = require('./middleware/main');
-const { defaultErrorHandler } = require('./lib/errorHandlers');
+const router = require(appRoot + '/routes/createRouter')();
+const envVar = require(appRoot + '/config/environment/variables');
+const setMiddleware = require(appRoot + '/middleware/main');
+const { defaultErrorHandler } = require(appRoot + '/lib/errorHandlers');
+const { gracefulConnectionDrop, createMongodbConnection } = require(appRoot + '/lib/libMongoose.js');
 const listenPort = envVar.port || 3000;
-/* 
+
+/*
 When creating a logger instance per file I started getting a MaxListenersExceededWarning.
 Warning went away when logger instances were removed from the files were not
 using them. Problem was fixed on Winston Pull #1344 for file and #1513 silences
@@ -17,14 +21,22 @@ If we see it in the future again it is possible to fix it (at the moment at leas
 increasing the maximum number of listeners from 10 to 15:
     process.setMaxListeners(15);
 */
-const logger = require('./middleware/logging')();
+
+// Setting up winston logger
+const logger = require(appRoot + '/middleware/logging')();
 
 const app = express();
 
 // Make /dist folder available
 app.use(express.static(path.join(__dirname, './dist')));
 
-setMiddleware(app, express, envVar);
+// Setting up MongoDb connection
+const dbConnectionArray = new Array();
+const dBaseConfig = require(appRoot + '/config/database/keys');
+
+dbConnectionArray.push(createMongodbConnection(dBaseConfig));
+
+setMiddleware(app, express, dbConnectionArray[0]);
 
 // Routes setup
 app.get('/', (req, res, next)  => {
@@ -39,8 +51,14 @@ app.use('/api', router);
 // Default request error handler
 app.use(defaultErrorHandler);
 
+let server = undefined;
 if(app.get('env') !== 'production')  {
-    app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));
+    module.exports = server = app.listen(listenPort, logger.debug(`Server started on port ${listenPort}`));
 } else {
-    app.listen(listenPort);
+    module.exports = server = app.listen(listenPort);
 }
+
+server.on("close", () => {
+    logger.warn("App closing...");
+    gracefulConnectionDrop(dbConnectionArray);
+})
